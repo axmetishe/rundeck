@@ -49,17 +49,43 @@
     <compile.jdk.version>1.7</compile.jdk.version>
     <maven.min.version>3.2.1</maven.min.version>
     <maven.max.version>3.3.3</maven.max.version>
+
+    <maven.build.timestamp.format>dd.MM.yyyy' 'HH:mm:ss</maven.build.timestamp.format>
+    <timestamp>${maven.build.timestamp}</timestamp>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <src.dir>src/main/java</src.dir>
+    <res.dir>src/main/resources</res.dir>
+    <assembly.dir>src/assembly</assembly.dir>
+    <test.src.dir>src/test/java</test.src.dir>
+    <test.res.dir>src/test/resources</test.res.dir>
 
     <!-- 3rd party versions -->
     <groovyVersion>2.3.7</groovyVersion>
     <jacksonVersion>2.5.3</jacksonVersion>
+    <jaxenVersion>1.1</jaxenVersion>
+    <commonsBeanUtilsVersion>1.8.3</commonsBeanUtilsVersion>
+    <commonsCollectVersion>3.2.1</commonsCollectVersion>
+    <commonsCodecVersion>1.5</commonsCodecVersion>
+    <commonsHttpVersion>3.0.1</commonsHttpVersion>
+    <commonsPoolVersion>1.5.3</commonsPoolVersion>
+    <commonsLogVersion>1.1.1</commonsLogVersion>
+    <commonsLangVersion>2.6</commonsLangVersion>
+    <commonsCliVersion>1.0</commonsCliVersion>
+    <xmlApisVersion>1.4.01</xmlApisVersion>
+    <jschVersion>0.1.52</jschVersion>
+    <jschAPVersion>0.0.9</jschAPVersion>
+    <xercesVersion>2.11.0</xercesVersion>
+    <dom4jVersion>1.6.1</dom4jVersion>
+    <snakeyamlVersion>1.9</snakeyamlVersion>
+    <antVersion>1.8.3</antVersion>
+    <log4jVersion>1.2.17</log4jVersion>
 
     <!-- tests -->
     <mockitoVersion>1.8.5</mockitoVersion>
     <spockVersion>0.7-groovy-2.0</spockVersion>
-    <junitVersion>3.8.1</junitVersion>
+    <junitVersion>4.8.1</junitVersion>
 
     <!-- plugin versions -->
     <findbugsPluginVersion>3.0.3</findbugsPluginVersion>
@@ -123,8 +149,89 @@
   </reporting>
 
   <build>
+    <plugins>
+      <plugin>
+        <groupId>ru.concerteza.buildnumber</groupId>
+        <artifactId>maven-jgit-buildnumber-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>extract-buildnumber</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-rules</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.6</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <addDefaultImplementationEntries>
+                  true
+                </addDefaultImplementationEntries>
+              </manifest>
+              <manifestSections>
+                <manifestSection>
+                  <name>SCM</name>
+                  <manifestEntries>
+                    <Url>${project.scm.url}</Url>
+                    <Ref>${git.buildnumber}</Ref>
+                    <Build-Version>${project.version}</Build-Version>
+                    <Source-Revision>${git.shortRevision}</Source-Revision>
+                  </manifestEntries>
+                </manifestSection>
+                <manifestSection>
+                  <name>CI</name>
+                  <manifestEntries>
+                    <System>${project.ciManagement.system}</System>
+                    <Url>${project.ciManagement.url}</Url>
+                    <Build-Time>${timestamp}</Build-Time>
+                  </manifestEntries>
+                </manifestSection>
+              </manifestSections>
+            </archive>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -138,20 +245,88 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.10</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.4.1</version>
+          <configuration>
+            <rules>
+              <requireJavaVersion>
+                <message>
+                  To build this project JDK ${compile.jdk.version} is required.
+                  Please install it.
+                </message>
+                <version>${compile.jdk.version}</version>
+              </requireJavaVersion>
+              <requireMavenVersion>
+                <message>
+                  Maven ${maven.min.version} to ${maven.max.version} is required.
+                </message>
+                <version>[${maven.min.version},${maven.max.version}]</version>
+              </requireMavenVersion>
+              <requirePluginVersions>
+                <message>
+                  Build reproducibility : always define plugin versions
+                </message>
+                <banLatest>true</banLatest>
+                <banRelease>true</banRelease>
+                <phases>clean,deploy</phases>
+              </requirePluginVersions>
+            </rules>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${javadocPluginVersion}</version>
           <configuration>
             <failOnError>false</failOnError>
           </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>javadoc</goal>
-                <goal>test-javadoc</goal>
-              </goals>
-              <phase>prepare-package</phase>
-            </execution>
-          </executions>
+            <executions>
+              <execution>
+                <id>attach-javadoc</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>javadoc</goal>
+                </goals>
+                <configuration>
+                  <docletArtifact>
+                    <groupId>com.google.doclava</groupId>
+                    <artifactId>doclava</artifactId>
+                    <version>1.0.3</version>
+                  </docletArtifact>
+                  <doclet>com.google.doclava.Doclava</doclet>
+                  <bootclasspath>${sun.boot.class.path}</bootclasspath>
+                  <additionalparam>-quiet
+                    -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
+                    -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
+                    -hdf project.name "${project.name}"
+                    -d .
+                    -hide 101
+                    -proofread ./proof-read.txt</additionalparam>
+                  <useStandardDocletOptions>false</useStandardDocletOptions>
+                  <additionalJOption>-J-Xmx1024m</additionalJOption>
+                </configuration>
+              </execution>
+            </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -166,7 +341,62 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>2.8.1</version>
+          <version>2.9</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.4</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.skins</groupId>
+              <artifactId>maven-fluido-skin</artifactId>
+              <version>1.4</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-webdav-jackrabbit</artifactId>
+              <version>2.10</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>2.10</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.0.0</version>
+          <configuration>
+            <classifier>sources</classifier>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+              <manifestSections>
+                <manifestSection>
+                  <name>SCM</name>
+                  <manifestEntries>
+                    <Url>${project.scm.url}</Url>
+                    <Ref>${git.buildnumber}</Ref>
+                    <Build-Version>${project.version}</Build-Version>
+                    <Source-Revision>${git.shortRevision}</Source-Revision>
+                  </manifestEntries>
+                </manifestSection>
+                <manifestSection>
+                  <name>CI</name>
+                  <manifestEntries>
+                    <System>${project.ciManagement.system}</System>
+                    <Url>${project.ciManagement.url}</Url>
+                    <Build-Time>${timestamp}</Build-Time>
+                  </manifestEntries>
+                </manifestSection>
+              </manifestSections>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -186,6 +416,131 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>${findbugsPluginVersion}</version>
+        </plugin>
+        <plugin>
+          <groupId>ru.concerteza.buildnumber</groupId>
+          <artifactId>maven-jgit-buildnumber-plugin</artifactId>
+          <version>1.2.10</version>
+          <configuration>
+            <javaScriptBuildnumberCallback>tag + branch</javaScriptBuildnumberCallback>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5.3</version>
+          <configuration>
+            <preparationGoals>clean verify</preparationGoals>
+            <goals>deploy</goals>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+            <generateReleasePoms>false</generateReleasePoms>
+            <tagNameFormat>v@{project.version}</tagNameFormat>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <version>1.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.6</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+              <manifestEntries>
+                <Rundeck-Version>${project.version}</Rundeck-Version>
+              </manifestEntries>
+              <manifestSections>
+                <manifestSection>
+                  <name>SCM</name>
+                  <manifestEntries>
+                    <Url>${project.scm.url}</Url>
+                    <Ref>${git.buildnumber}</Ref>
+                    <Build-Version>${project.version}</Build-Version>
+                    <Source-Revision>${git.shortRevision}</Source-Revision>
+                  </manifestEntries>
+                </manifestSection>
+                <manifestSection>
+                  <name>CI</name>
+                  <manifestEntries>
+                    <System>${project.ciManagement.system}</System>
+                    <Url>${project.ciManagement.url}</Url>
+                    <Build-Time>${timestamp}</Build-Time>
+                  </manifestEntries>
+                </manifestSection>
+              </manifestSections>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.6</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+              <manifestSections>
+                <manifestSection>
+                  <name>SCM</name>
+                  <manifestEntries>
+                    <Url>${project.scm.url}</Url>
+                    <Ref>${git.buildnumber}</Ref>
+                    <Build-Version>${project.version}</Build-Version>
+                    <Source-Revision>${git.shortRevision}</Source-Revision>
+                  </manifestEntries>
+                </manifestSection>
+                <manifestSection>
+                  <name>CI</name>
+                  <manifestEntries>
+                    <System>${project.ciManagement.system}</System>
+                    <Url>${project.ciManagement.url}</Url>
+                    <Build-Time>${timestamp}</Build-Time>
+                  </manifestEntries>
+                </manifestSection>
+              </manifestSections>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rpm-maven-plugin</artifactId>
+          <version>2.1.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.grails</groupId>
+          <artifactId>grails-maven-plugin</artifactId>
+          <version>2.4.6</version>
+          <configuration>
+            <grailsVersion>2.4.4</grailsVersion>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.vafer</groupId>
+          <artifactId>jdeb</artifactId>
+          <version>1.5</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -214,6 +569,11 @@
         <artifactId>filesys</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.rundeck</groupId>
+        <artifactId>core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <!-- 3rd party -->
       <dependency>
@@ -225,6 +585,131 @@
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
         <version>${jacksonVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jacksonVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>xml-apis</groupId>
+        <artifactId>xml-apis</artifactId>
+        <version>${xmlApisVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>jaxen</groupId>
+        <artifactId>jaxen</artifactId>
+        <version>${jaxenVersion}</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>xmlParserAPIs</artifactId>
+            <groupId>xerces</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>xalan</artifactId>
+            <groupId>xalan</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>xerces</groupId>
+        <artifactId>xercesImpl</artifactId>
+        <version>${xercesVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>dom4j</groupId>
+        <artifactId>dom4j</artifactId>
+        <version>${dom4jVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>${snakeyamlVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${commonsBeanUtilsVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-collections</groupId>
+        <artifactId>commons-collections</artifactId>
+        <version>${commonsCollectVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${commonsCodecVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>${commonsCliVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-httpclient</groupId>
+        <artifactId>commons-httpclient</artifactId>
+        <version>${commonsHttpVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>${commonsLangVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>${commonsLogVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.ant</groupId>
+        <artifactId>ant</artifactId>
+        <version>${antVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.ant</groupId>
+        <artifactId>ant-jsch</artifactId>
+        <version>${antVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch</artifactId>
+        <version>${jschVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch.agentproxy.core</artifactId>
+        <version>${jschAPVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch.agentproxy.jsch</artifactId>
+        <version>${jschAPVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch.agentproxy.connector-factory</artifactId>
+        <version>${jschAPVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch.agentproxy.usocket-jna</artifactId>
+        <version>${jschAPVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch.agentproxy.sshagent</artifactId>
+        <version>${jschAPVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch.agentproxy.usocket-nc</artifactId>
+        <version>${jschAPVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4jVersion}</version>
       </dependency>
 
       <!-- Tests -->
