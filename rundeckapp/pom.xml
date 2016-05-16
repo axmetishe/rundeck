@@ -14,6 +14,7 @@
   <name>RunDeck::App</name>
   <description>RunDeck Command and Job Console</description>
   <url>http://rundeck.org</url>
+  <!-- TODO: fix tests -->
 
   <build>
     <pluginManagement>
