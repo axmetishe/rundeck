@@ -66,7 +66,7 @@
     <jacksonVersion>2.5.3</jacksonVersion>
     <jaxenVersion>1.1</jaxenVersion>
     <commonsBeanUtilsVersion>1.8.3</commonsBeanUtilsVersion>
-    <commonsCollectVersion>3.2.1</commonsCollectVersion>
+    <commonsCollectVersion>3.2.2</commonsCollectVersion>
     <commonsCodecVersion>1.5</commonsCodecVersion>
     <commonsHttpVersion>3.0.1</commonsHttpVersion>
     <commonsPoolVersion>1.5.3</commonsPoolVersion>
@@ -74,7 +74,7 @@
     <commonsLangVersion>2.6</commonsLangVersion>
     <commonsCliVersion>1.0</commonsCliVersion>
     <xmlApisVersion>1.4.01</xmlApisVersion>
-    <jschVersion>0.1.52</jschVersion>
+    <jschVersion>0.1.53</jschVersion>
     <jschAPVersion>0.0.9</jschAPVersion>
     <xercesVersion>2.11.0</xercesVersion>
     <dom4jVersion>1.6.1</dom4jVersion>
@@ -602,12 +602,12 @@
         <version>${jaxenVersion}</version>
         <exclusions>
           <exclusion>
-            <artifactId>xmlParserAPIs</artifactId>
             <groupId>xerces</groupId>
+            <artifactId>xmlParserAPIs</artifactId>
           </exclusion>
           <exclusion>
-            <artifactId>xalan</artifactId>
             <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
