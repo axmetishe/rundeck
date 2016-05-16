@@ -51,8 +51,8 @@
     <module>rundeck-storage</module>
     <module>core</module>
     <module>plugins</module>
-    <module>rundeckapp</module>
     <module>rundeck-launcher</module>
+    <module>rundeckapp</module>
   </modules>
 
   <properties>
@@ -97,8 +97,43 @@
     <cglibNodepVersion>2.2.2</cglibNodepVersion>
     <jasyptVersion>1.9.2</jasyptVersion>
     <bcprovVersion>1.51</bcprovVersion>
+    <metricsVersion>3.0.2</metricsVersion>
+    <guavaVersion>15.0</guavaVersion>
+    <encoderVersion>1.1.1</encoderVersion>
+    <owaspSanitizerVersion>r239</owaspSanitizerVersion>
+    <quartzVersion>2.2.1</quartzVersion>
+    <markdownjVersion>0.4</markdownjVersion>
+    <pgsqlVersion>9.1-901.jdbc4</pgsqlVersion>
+    <mysqlVersion>5.1.35</mysqlVersion>
+    <hsqlVersion>1.8.0.10</hsqlVersion>
+    <hiberVersion>4.3.6.Final</hiberVersion>
+    <hiberAnnotVersion>4.0.4.Final</hiberAnnotVersion>
+    <hiberValidatorVersion>5.0.3.Final</hiberValidatorVersion>
+    <javaxValidVersion>1.1.0.Final</javaxValidVersion>
+    <javassistVersion>3.17.1-GA</javassistVersion>
+    <jbossLogVersion>3.1.0.GA</jbossLogVersion>
+    <sfEhcacheVersion>2.4.8</sfEhcacheVersion>
+    <springVersion>4.0.7.RELEASE</springVersion>
 
     <log4jVersion>1.2.17</log4jVersion>
+    <slf4jVersion>1.6.6</slf4jVersion>
+
+    <!-- Grails versions -->
+    <grailsVersion>2.4.4</grailsVersion>
+    <grailsQuartzVersion>1.0.2</grailsQuartzVersion>
+    <grailsMailVersion>1.0.7</grailsMailVersion>
+    <grailsExecutorVersion>0.3</grailsExecutorVersion>
+    <grailsHiberVersion>4.3.6.1</grailsHiberVersion>
+    <grailsAssetPipeVersion>2.0.8</grailsAssetPipeVersion>
+    <grailsTwitBootVersion>3.3.2.1</grailsTwitBootVersion>
+    <grailsCacheVersion>1.1.8</grailsCacheVersion>
+    <grailsPlatformCoreVersion>1.0.0</grailsPlatformCoreVersion>
+    <grailsCodenarcVersion>0.22</grailsCodenarcVersion>
+    <grailsJettyVersion>2.0.3</grailsJettyVersion>
+    <grailsTomcatVersion>7.0.42</grailsTomcatVersion>
+    <grailsCodeCovVersion>2.0.3-3</grailsCodeCovVersion>
+    <grailsMProfilerVersion>0.4.1</grailsMProfilerVersion>
+    <grailsProfilerVersion>0.5</grailsProfilerVersion>
 
     <!-- tests -->
     <mockitoVersion>1.8.5</mockitoVersion>
@@ -429,20 +464,6 @@
           <artifactId>maven-surefire-report-plugin</artifactId>
           <version>${surefirePluginVersion}</version>
         </plugin>
-
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>findbugs-maven-plugin</artifactId>
-          <version>${findbugsPluginVersion}</version>
-        </plugin>
-        <plugin>
-          <groupId>ru.concerteza.buildnumber</groupId>
-          <artifactId>maven-jgit-buildnumber-plugin</artifactId>
-          <version>1.2.10</version>
-          <configuration>
-            <javaScriptBuildnumberCallback>tag + branch</javaScriptBuildnumberCallback>
-          </configuration>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
@@ -532,6 +553,20 @@
             </archive>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>findbugs-maven-plugin</artifactId>
+          <version>${findbugsPluginVersion}</version>
+        </plugin>
+        <plugin>
+          <groupId>ru.concerteza.buildnumber</groupId>
+          <artifactId>maven-jgit-buildnumber-plugin</artifactId>
+          <version>1.2.10</version>
+          <configuration>
+            <javaScriptBuildnumberCallback>tag + branch</javaScriptBuildnumberCallback>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
@@ -552,7 +587,7 @@
           <artifactId>grails-maven-plugin</artifactId>
           <version>2.4.6</version>
           <configuration>
-            <grailsVersion>2.4.4</grailsVersion>
+            <grailsVersion>${grailsVersion}</grailsVersion>
           </configuration>
         </plugin>
         <plugin>
@@ -680,6 +715,11 @@
         <version>${commonsLogVersion}</version>
       </dependency>
       <dependency>
+        <groupId>commons-pool</groupId>
+        <artifactId>commons-pool</artifactId>
+        <version>${commonsPoolVersion}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.ant</groupId>
         <artifactId>ant</artifactId>
         <version>${antVersion}</version>
@@ -750,12 +790,246 @@
         <version>${bcprovVersion}</version>
       </dependency>
       <dependency>
+        <groupId>com.codahale.metrics</groupId>
+        <artifactId>metrics-core</artifactId>
+        <version>${metricsVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.codahale.metrics</groupId>
+        <artifactId>metrics-servlets</artifactId>
+        <version>${metricsVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${guavaVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.owasp.encoder</groupId>
+        <artifactId>encoder</artifactId>
+        <version>${encoderVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+        <artifactId>owasp-java-html-sanitizer</artifactId>
+        <version>${owaspSanitizerVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.quartz-scheduler</groupId>
+        <artifactId>quartz</artifactId>
+        <version>${quartzVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.markdownj</groupId>
+        <artifactId>markdownj-core</artifactId>
+        <version>${markdownjVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${pgsqlVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>${mysqlVersion}</version>
+      </dependency>
+
+      <!-- Hibernate dependencies -->
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hiberVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-ehcache</artifactId>
+        <version>${hiberVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>${hiberValidatorVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate.common</groupId>
+        <artifactId>hibernate-commons-annotations</artifactId>
+        <version>${hiberAnnotVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>${javaxValidVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.javassist</groupId>
+        <artifactId>javassist</artifactId>
+        <version>${javassistVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging</artifactId>
+        <version>${jbossLogVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.ehcache</groupId>
+        <artifactId>ehcache-core</artifactId>
+        <version>${sfEhcacheVersion}</version>
+      </dependency>
+
+      <!-- Spring versions -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-orm</artifactId>
+        <version>${springVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>${springVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-tx</artifactId>
+        <version>${springVersion}</version>
+      </dependency>
+
+      <dependency>
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
         <version>${log4jVersion}</version>
       </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4jVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>${slf4jVersion}</version>
+      </dependency>
+
+      <!-- Grails dependencies -->
+      <dependency>
+        <groupId>org.grails</groupId>
+        <artifactId>grails-project-api</artifactId>
+        <version>${grailsVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails</groupId>
+        <artifactId>grails-dependencies</artifactId>
+        <version>${grailsVersion}</version>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>quartz</artifactId>
+        <version>${grailsQuartzVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>mail</artifactId>
+        <version>${grailsMailVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>executor</artifactId>
+        <version>${grailsExecutorVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>hibernate4</artifactId>
+        <version>${grailsHiberVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>asset-pipeline</artifactId>
+        <version>${grailsAssetPipeVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>less-asset-pipeline</artifactId>
+        <version>${grailsAssetPipeVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>twitter-bootstrap</artifactId>
+        <version>${grailsTwitBootVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>cache</artifactId>
+        <version>${grailsCacheVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>platform-core</artifactId>
+        <version>${grailsPlatformCoreVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>codenarc</artifactId>
+        <version>${grailsCodenarcVersion}</version>
+        <type>zip</type>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>jetty</artifactId>
+        <version>${grailsJettyVersion}</version>
+        <type>zip</type>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>tomcat</artifactId>
+        <version>${grailsTomcatVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>profiler</artifactId>
+        <version>${grailsProfilerVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>miniprofiler</artifactId>
+        <version>${grailsMProfilerVersion}</version>
+        <type>zip</type>
+        <scope>runtime</scope>
+      </dependency>
 
       <!-- Tests -->
+      <dependency>
+        <groupId>org.grails.plugins</groupId>
+        <artifactId>code-coverage</artifactId>
+        <version>${grailsCodeCovVersion}</version>
+        <type>zip</type>
+        <scope>test</scope>
+      </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>
