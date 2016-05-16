@@ -9,16 +9,16 @@
   </parent>
 
   <groupId>org.rundeck.plugins</groupId>
-  <artifactId>localexec</artifactId>
+  <artifactId>jobstate</artifactId>
 
-  <name>RunDeck::Plugins::LocalExec</name>
-  <description>Run a command locally on the server</description>
+  <name>RunDeck::Plugins::JobState</name>
+  <description>Evaluate state of another Job</description>
   <url>http://rundeck.org</url>
 
   <properties>
-    <descriptiveName>Local Command Step</descriptiveName>
+    <descriptiveName>Job State Conditional</descriptiveName>
     <pluginClassname>
-      com.dtolabs.rundeck.plugin.localexec.LocalExecNodeStepPlugin
+      org.rundeck.plugin.jobstate.JobStateWorkflowStep
     </pluginClassname>
   </properties>
 </project>

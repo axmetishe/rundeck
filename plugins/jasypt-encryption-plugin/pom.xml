@@ -9,16 +9,27 @@
   </parent>
 
   <groupId>org.rundeck.plugins</groupId>
-  <artifactId>localexec</artifactId>
+  <artifactId>encrypt</artifactId>
 
-  <name>RunDeck::Plugins::LocalExec</name>
-  <description>Run a command locally on the server</description>
+  <name>RunDeck::Plugins::Encrypt</name>
+  <description>Encrypt contents of Storage resources</description>
   <url>http://rundeck.org</url>
 
   <properties>
-    <descriptiveName>Local Command Step</descriptiveName>
+    <descriptiveName>Jasypt Encryption Plugin</descriptiveName>
     <pluginClassname>
-      com.dtolabs.rundeck.plugin.localexec.LocalExecNodeStepPlugin
+      org.rundeck.plugin.encryption.JasyptEncryptionConverterPlugin
     </pluginClassname>
   </properties>
+
+  <dependencies>
+  <dependency>
+    <groupId>org.jasypt</groupId>
+    <artifactId>jasypt</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcprov-jdk15on</artifactId>
+  </dependency>
+</dependencies>
 </project>

@@ -9,16 +9,16 @@
   </parent>
 
   <groupId>org.rundeck.plugins</groupId>
-  <artifactId>localexec</artifactId>
+  <artifactId>flowcontrol</artifactId>
 
-  <name>RunDeck::Plugins::LocalExec</name>
-  <description>Run a command locally on the server</description>
+  <name>RunDeck::Plugins::FlowControl</name>
+  <description>Control execution flow</description>
   <url>http://rundeck.org</url>
 
   <properties>
-    <descriptiveName>Local Command Step</descriptiveName>
+    <descriptiveName>Flow Control</descriptiveName>
     <pluginClassname>
-      com.dtolabs.rundeck.plugin.localexec.LocalExecNodeStepPlugin
+      org.rundeck.plugin.flowcontrol.FlowControlWorkflowStep
     </pluginClassname>
   </properties>
 </project>

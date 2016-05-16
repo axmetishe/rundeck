@@ -33,6 +33,16 @@
     <url>https://github.com/rundeck/rundeck</url>
   </scm>
 
+  <ciManagement>
+    <system>Travis</system>
+    <url>https://travis-ci.org/rundeck/rundeck</url>
+  </ciManagement>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/rundeck/rundeck/issues</url>
+  </issueManagement>
+
   <prerequisites>
     <maven>${maven.min.version}</maven>
   </prerequisites>
@@ -49,6 +59,7 @@
     <compile.jdk.version>1.7</compile.jdk.version>
     <maven.min.version>3.2.1</maven.min.version>
     <maven.max.version>3.3.3</maven.max.version>
+    <git.shortRevision/>
 
     <maven.build.timestamp.format>dd.MM.yyyy' 'HH:mm:ss</maven.build.timestamp.format>
     <timestamp>${maven.build.timestamp}</timestamp>
@@ -60,6 +71,8 @@
     <assembly.dir>src/assembly</assembly.dir>
     <test.src.dir>src/test/java</test.src.dir>
     <test.res.dir>src/test/resources</test.res.dir>
+
+    <rundeckPluginVersion>1.1</rundeckPluginVersion>
 
     <!-- 3rd party versions -->
     <groovyVersion>2.3.7</groovyVersion>
@@ -80,6 +93,11 @@
     <dom4jVersion>1.6.1</dom4jVersion>
     <snakeyamlVersion>1.9</snakeyamlVersion>
     <antVersion>1.8.3</antVersion>
+    <jgitVersion>3.7.1.201504261725-r</jgitVersion>
+    <cglibNodepVersion>2.2.2</cglibNodepVersion>
+    <jasyptVersion>1.9.2</jasyptVersion>
+    <bcprovVersion>1.51</bcprovVersion>
+
     <log4jVersion>1.2.17</log4jVersion>
 
     <!-- tests -->
@@ -434,7 +452,7 @@
             <goals>deploy</goals>
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <generateReleasePoms>false</generateReleasePoms>
-            <tagNameFormat>v@{project.version}</tagNameFormat>
+            <tagNameFormat>release-@{project.version}</tagNameFormat>
           </configuration>
         </plugin>
         <plugin>
@@ -705,6 +723,31 @@
         <groupId>com.jcraft</groupId>
         <artifactId>jsch.agentproxy.usocket-nc</artifactId>
         <version>${jschAPVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jgit</groupId>
+        <artifactId>org.eclipse.jgit</artifactId>
+        <version>${jgitVersion}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.jasypt</groupId>
+        <artifactId>jasypt</artifactId>
+        <version>${jasyptVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk15on</artifactId>
+        <version>${bcprovVersion}</version>
       </dependency>
       <dependency>
         <groupId>log4j</groupId>

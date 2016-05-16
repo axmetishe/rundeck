@@ -9,16 +9,23 @@
   </parent>
 
   <groupId>org.rundeck.plugins</groupId>
-  <artifactId>localexec</artifactId>
+  <artifactId>git</artifactId>
 
-  <name>RunDeck::Plugins::LocalExec</name>
-  <description>Run a command locally on the server</description>
+  <name>RunDeck::Plugins::Git</name>
+  <description>Export and Import Jobs with a Git repository</description>
   <url>http://rundeck.org</url>
 
   <properties>
-    <descriptiveName>Local Command Step</descriptiveName>
+    <descriptiveName>Git Plugin</descriptiveName>
     <pluginClassname>
-      com.dtolabs.rundeck.plugin.localexec.LocalExecNodeStepPlugin
+      org.rundeck.plugin.scm.git.GitExportPluginFactory,org.rundeck.plugin.scm.git.GitImportPluginFactory
     </pluginClassname>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.jgit</groupId>
+      <artifactId>org.eclipse.jgit</artifactId>
+    </dependency>
+  </dependencies>
 </project>
