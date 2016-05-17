@@ -11,10 +11,11 @@
 . /etc/rundeck/profile
 
 prog="rundeckd"
-rundeckd="${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}"
+rundeckd="${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer ${rpmAppPrefix} ${RDECK_HTTP_PORT}"
 RETVAL=0
 PID_FILE=/var/run/${prog}.pid
-servicelog=/var/log/rundeck/service.log
+USER=${rpmAppUser}
+servicelog=${rpmAppLogDir}/service.log
 
 start() {
 	echo -n $"Starting $prog: "
@@ -24,7 +25,7 @@ start() {
 		echo
 		return 1
 	fi
-        nohup runuser -s /bin/bash -l rundeck -c "$rundeckd" >>$servicelog 2>&1 &
+        nohup runuser -s /bin/bash -l $USER -c "$rundeckd" >>$servicelog 2>&1 &
  	RETVAL=$?	
 	PID=$!
 	echo $PID > $PID_FILE

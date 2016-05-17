@@ -1,8 +1,8 @@
-RDECK_BASE=/var/lib/rundeck
+RDECK_BASE=${rpmAppPrefix}
 export RDECK_BASE
 
 JAVA_CMD=java
-RUNDECK_TEMPDIR=/tmp/rundeck
+RUNDECK_TEMPDIR=${rpmAppTempDir}
 
 RDECK_HTTP_PORT=4440
 RDECK_HTTPS_PORT=4443

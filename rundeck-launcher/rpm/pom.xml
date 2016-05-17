@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.rundeck</groupId>
+    <artifactId>launcher</artifactId>
+    <version>2.6.7-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.rundeck.launcher</groupId>
+  <artifactId>rpm</artifactId>
+  <packaging>rpm</packaging>
+
+  <name>RunDeck::Launcher::RPM</name>
+  <description>
+    RunDeck, is no ordinary wooden deck. You can build a bon fire on this deck.
+    Rundeck provides a single console for dispatching commands across many resources.
+  </description>
+  <url>http://rundeck.org</url>
+
+  <properties>
+    <rpmProjectName>rundeck</rpmProjectName>
+    <rpmProjectGroup>Applications/System</rpmProjectGroup>
+    <rpmProjectArch>noarch</rpmProjectArch>
+    <rpmAppPrefix>/var/lib/${rpmProjectName}</rpmAppPrefix>
+    <rpmAppConfDir>/etc/${rpmProjectName}</rpmAppConfDir>
+    <rpmAppLogDir>/var/log/${rpmProjectName}</rpmAppLogDir>
+    <rpmAppTempDir>/tmp/${rpmProjectName}</rpmAppTempDir>
+    <rpmAppProjectPrefix>/var/${rpmProjectName}/projects</rpmAppProjectPrefix>
+    <rpmAppUser>${rpmProjectName}</rpmAppUser>
+    <rpmAppGroup>${rpmAppUser}</rpmAppGroup>
+    <rpmDirMode>755</rpmDirMode>
+    <rpmFileMode>644</rpmFileMode>
+  </properties>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>${res.dir}</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>attached-rpm</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <name>${rpmProjectName}</name>
+          <group>${rpmProjectGroup}</group>
+          <license>APL</license>
+          <classifier>${rpmProjectArch}</classifier>
+          <prefix>${rpmAppPrefix}</prefix>
+          <defaultDirmode>${rpmDirMode}</defaultDirmode>
+          <defaultFilemode>${rpmFileMode}</defaultFilemode>
+          <defaultUsername>${rpmAppUser}</defaultUsername>
+          <defaultGroupname>${rpmAppGroup}</defaultGroupname>
+          <requires>
+            <require>openssh</require>
+          </requires>
+          <defineStatements>
+          </defineStatements>
+          <mappings>
+            <mapping>
+              <directory>${rpmAppConfDir}</directory>
+              <configuration>noreplace</configuration>
+              <sources>
+                <source>
+                  <location>${project.build.outputDirectory}/etc/rundeck</location>
+                </source>
+              </sources>
+            </mapping>
+          </mappings>
+          <preinstallScriptlet>
+            <scriptFile>${project.build.outputDirectory}/scripts/preinst</scriptFile>
+          </preinstallScriptlet>
+          <postinstallScriptlet>
+            <scriptFile>${project.build.outputDirectory}/scripts/postinst</scriptFile>
+          </postinstallScriptlet>
+          <preremoveScriptlet>
+            <scriptFile>${project.build.outputDirectory}/scripts/preun</scriptFile>
+          </preremoveScriptlet>
+          <postremoveScriptlet>
+            <scriptFile>${project.build.outputDirectory}/scripts/postun</scriptFile>
+          </postremoveScriptlet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

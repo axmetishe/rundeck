@@ -4,20 +4,14 @@
 
   <parent>
     <groupId>org.rundeck</groupId>
-    <artifactId>rundeck-project</artifactId>
+    <artifactId>launcher</artifactId>
     <version>2.6.7-SNAPSHOT</version>
   </parent>
 
-  <artifactId>launcher</artifactId>
-  <packaging>pom</packaging>
+  <groupId>org.rundeck.launcher</groupId>
+  <artifactId>deb</artifactId>
 
-  <name>RunDeck::Launcher</name>
+  <name>RunDeck::Launcher::DEB</name>
   <url>http://rundeck.org</url>
 
-  <modules>
-    <module>rundeck-jetty-server</module>
-    <module>launcher</module>
-    <module>rpm</module>
-    <!--<module>deb</module>-->
-  </modules>
 </project>
