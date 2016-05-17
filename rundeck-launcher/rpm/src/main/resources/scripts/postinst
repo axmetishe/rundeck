@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 if [ ! -e ~${rpmAppUser}/.ssh/id_rsa ]; then
 	su -c "ssh-keygen -q -t rsa -C '' -N '' -f ~${rpmAppUser}/.ssh/id_rsa" ${rpmAppUser}
 fi

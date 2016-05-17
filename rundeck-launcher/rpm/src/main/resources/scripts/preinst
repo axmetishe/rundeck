@@ -1,3 +1,2 @@
-#!/usr/bin/env bash
 getent group ${rpmAppGroup} >/dev/null || groupadd ${rpmAppGroup}
 getent passwd ${rpmAppUser} >/dev/null || useradd -d ${rpmAppPrefix} -m -g ${rpmAppGroup} ${rpmAppUser}

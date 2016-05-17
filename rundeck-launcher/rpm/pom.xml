@@ -58,6 +58,7 @@
           <name>${rpmProjectName}</name>
           <group>${rpmProjectGroup}</group>
           <license>APL</license>
+          <summary>${project.parent.name}</summary>
           <classifier>${rpmProjectArch}</classifier>
           <prefix>${rpmAppPrefix}</prefix>
           <defaultDirmode>${rpmDirMode}</defaultDirmode>
@@ -78,6 +79,44 @@
                   <location>${project.build.outputDirectory}/etc/rundeck</location>
                 </source>
               </sources>
+            </mapping>
+            <mapping>
+              <directory>/etc/rc.d/init.d</directory>
+              <sources>
+                <source>
+                  <location>${project.build.outputDirectory}/etc/rc.d/init.d</location>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/.ssh</directory>
+              <filemode>700</filemode>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/logs</directory>
+              <sources>
+                <softlinkSource>
+                  <location>${rpmAppLogDir}</location>
+                </softlinkSource>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/data</directory>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/work</directory>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/exp/webapp</directory>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/var/tmp/pluginJars</directory>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppProjectPrefix}</directory>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppTempDir}</directory>
             </mapping>
           </mappings>
           <preinstallScriptlet>
