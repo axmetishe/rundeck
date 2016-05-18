@@ -118,6 +118,7 @@
     <commonSslVersion>0.3.11</commonSslVersion>
     <jettyVersion>7.6.0.v20120127</jettyVersion>
     <libpam4jVersion>1.5</libpam4jVersion>
+    <jnaVersion>4.1.0</jnaVersion>
 
     <log4jVersion>1.2.17</log4jVersion>
     <slf4jVersion>1.6.6</slf4jVersion>
@@ -633,10 +634,56 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>copyfile</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>flowcontrol</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>git</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>encrypt</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>jobstate</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>localexec</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>orchestrator</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>script</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.plugins</groupId>
+        <artifactId>stub</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.rundeck</groupId>
         <artifactId>rundeck</artifactId>
         <version>${project.version}</version>
-        <type>grails-app</type>
+        <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.rundeck.launcher</groupId>
@@ -746,6 +793,11 @@
         <version>${antVersion}</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.ant</groupId>
+        <artifactId>ant-launcher</artifactId>
+        <version>${antVersion}</version>
+      </dependency>
+      <dependency>
         <groupId>com.jcraft</groupId>
         <artifactId>jsch</artifactId>
         <version>${jschVersion}</version>
@@ -778,6 +830,11 @@
       <dependency>
         <groupId>com.jcraft</groupId>
         <artifactId>jsch.agentproxy.usocket-nc</artifactId>
+        <version>${jschAPVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch.agentproxy.pageant</artifactId>
         <version>${jschAPVersion}</version>
       </dependency>
       <dependency>
@@ -849,6 +906,16 @@
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <version>${mysqlVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna</artifactId>
+        <version>${jnaVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna-platform</artifactId>
+        <version>${jnaVersion}</version>
       </dependency>
 
       <!-- Hibernate dependencies -->

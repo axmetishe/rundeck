@@ -41,7 +41,25 @@
         <filtering>true</filtering>
       </resource>
     </resources>
+
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-webapp</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>rundeck</includeArtifactIds>
+              <outputDirectory>${project.build.outputDirectory}/webapp</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>rpm-maven-plugin</artifactId>
@@ -93,9 +111,10 @@
               <filemode>700</filemode>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/logs</directory>
+              <directory>${rpmAppPrefix}</directory>
               <sources>
                 <softlinkSource>
+                  <destination>logs</destination>
                   <location>${rpmAppLogDir}</location>
                 </softlinkSource>
               </sources>
@@ -108,6 +127,11 @@
             </mapping>
             <mapping>
               <directory>${rpmAppPrefix}/exp/webapp</directory>
+              <sources>
+                <source>
+                  <location>${project.build.outputDirectory}/webapp</location>
+                </source>
+              </sources>
             </mapping>
             <mapping>
               <directory>${rpmAppPrefix}/var/tmp/pluginJars</directory>
@@ -117,6 +141,60 @@
             </mapping>
             <mapping>
               <directory>${rpmAppTempDir}</directory>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/cli</directory>
+              <dependency>
+                <includes>
+                  <include>org.rundeck:core</include>
+                  <include>org.rundeck.storage:*</include>
+                  <include>org.apache.ant:*</include>
+                  <include>commons-beanutils:*</include>
+                  <include>commons-cli:*</include>
+                  <include>commons-codec:*</include>
+                  <include>commons-collections:*</include>
+                  <include>commons-httpclient:*</include>
+                  <include>commons-lang:*</include>
+                  <include>commons-logging:*</include>
+                  <include>com.fasterxml.jackson.core:*</include>
+                  <include>com.jcraft:*</include>
+                  <include>dom4j:*</include>
+                  <include>jdom:*</include>
+                  <include>xom:*</include>
+                  <include>jaxen:*</include>
+                  <include>xerces:*</include>
+                  <include>xml-apis:*</include>
+                  <include>org.yaml:*</include>
+                  <include>com.ibm.icu:*</include>
+                  <include>net.java.dev.jna:*</include>
+                  <include>log4j:*</include>
+                </includes>
+              </dependency>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/bootstrap</directory>
+              <dependency>
+                <includes>
+                  <include>org.rundeck.launcher:jetty-server</include>
+                  <include>org.eclipse.jetty.aggregate:jetty-all</include>
+                  <include>log4j:log4j</include>
+                  <include>net.java.dev.jna:jna</include>
+                  <include>org.kohsuke:libpam4j</include>
+                  <include>javax.servlet:servlet-api</include>
+                  <include>ca.juliusdavies:not-yet-commons-ssl</include>
+                </includes>
+              </dependency>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/libext</directory>
+              <dependency>
+                <includes>
+                  <include>org.rundeck.plugins:*</include>
+                </includes>
+              </dependency>
+            </mapping>
+            <mapping>
+              <directory>${rpmAppPrefix}/libext/cache</directory>
             </mapping>
           </mappings>
           <preinstallScriptlet>
@@ -135,4 +213,69 @@
       </plugin>
     </plugins>
   </build>
+
+  <dependencies>
+    <!-- project dependencies-->
+    <dependency>
+      <groupId>org.rundeck</groupId>
+      <artifactId>core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.storage</groupId>
+      <artifactId>api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.storage</groupId>
+      <artifactId>data</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.storage</groupId>
+      <artifactId>conf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck</groupId>
+      <artifactId>rundeck</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.launcher</groupId>
+      <artifactId>jetty-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>copyfile</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>flowcontrol</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>git</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>encrypt</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>jobstate</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>localexec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>orchestrator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>script</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rundeck.plugins</groupId>
+      <artifactId>stub</artifactId>
+    </dependency>
+  </dependencies>
 </project>

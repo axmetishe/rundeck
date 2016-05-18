@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
-    <!-- TODO: a jarjar format would be better -->
     <id>launcher</id>
     <formats>
         <format>jar</format>
@@ -11,26 +10,17 @@
             <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <unpack>true</unpack>
-            <scope>runtime</scope>
-            <!-- <useTransitiveDependencies>false</useTransitiveDependencies> -->
-            <!-- <excludes> -->
-            <!-- <exclude>org.rundeck:rundeck-jetty-server</exclude> -->
-            <!-- <exclude>org.rundeck:rundeck:war</exclude> -->
-            <!-- </excludes> -->
             <includes>
                 <include>commons-cli:commons-cli</include>
-                <include>org.rundeck:rundeck-launcher:jar</include>
+                <!--<include>org.rundeck.launcher:rundeck-launcher</include>-->
             </includes>
         </dependencySet>
         <dependencySet>
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <outputDirectory>/lib</outputDirectory>
             <includes>
-                <include>org.rundeck:rundeck-jetty-server</include>
-                <include>org.mortbay.jetty:jetty</include>
-                <include>org.mortbay.jetty:jetty-util</include>
-                <include>org.mortbay.jetty:jetty-plus</include>
-                <include>org.mortbay.jetty:servlet-api</include>
+                <include>org.rundeck.launcher:jetty-server</include>
+                <include>:jetty-all</include>
                 <include>log4j:log4j</include>
             </includes>
         </dependencySet>
@@ -38,7 +28,7 @@
             <outputDirectory>/pkgs/webapp</outputDirectory>
             <unpack>true</unpack>
             <includes>
-                <include>org.rundeck:rundeck:war</include>
+                <include>org.rundeck.launcher:rundeck</include>
             </includes>
         </dependencySet>
     </dependencySets>
