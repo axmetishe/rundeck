@@ -18,6 +18,6 @@
     <module>rundeck-jetty-server</module>
     <module>launcher</module>
     <module>rpm</module>
-    <!--<module>deb</module>-->
+    <module>deb</module>
   </modules>
 </project>

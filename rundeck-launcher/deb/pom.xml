@@ -10,8 +10,68 @@
 
   <groupId>org.rundeck.launcher</groupId>
   <artifactId>deb</artifactId>
+  <packaging>deb</packaging>
 
   <name>RunDeck::Launcher::DEB</name>
+  <description>
+    RunDeck, is no ordinary wooden deck. You can build a bon fire on this deck.
+    Rundeck provides a single console for dispatching commands across many resources.
+  </description>
   <url>http://rundeck.org</url>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.vafer</groupId>
+        <artifactId>jdeb</artifactId>
+        <configuration>
+          <snapshotExpand>true</snapshotExpand>
+          <verbose>false</verbose>
+          <installDir>${packagingAppPrefix}</installDir>
+          <dataSet>
+            <data>
+              <type>directory</type>
+              <src>${project.build.outputDirectory}</src>
+              <includes>etc/**/*</includes>
+              <conffile>true</conffile>
+            </data>
+            <data>
+              <type>template</type>
+              <paths>
+                <path>${packagingAppPrefix}/.ssh</path>
+              </paths>
+              <mapper>
+                <type>perm</type>
+                <user>${packagingAppUser}</user>
+                <group>${packagingAppGroup}</group>
+                <dirmode>700</dirmode>
+              </mapper>
+            </data>
+            <data>
+              <type>template</type>
+              <paths>
+                <path>${packagingAppPrefix}/data</path>
+                <path>${packagingAppPrefix}/work</path>
+                <path>${packagingAppPrefix}/exp/webapp</path>
+                <path>${packagingAppLogDir}</path>
+              </paths>
+              <mapper>
+                <type>perm</type>
+                <user>${packagingAppUser}</user>
+                <group>${packagingAppGroup}</group>
+                <dirmode>750</dirmode>
+                <filemode>640</filemode>
+              </mapper>
+            </data>
+            <data>
+              <type>link</type>
+              <linkName>${packagingAppPrefix}/logs</linkName>
+              <linkTarget>${packagingAppLogDir}</linkTarget>
+              <symlink>true</symlink>
+            </data>
+          </dataSet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

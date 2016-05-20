@@ -75,6 +75,20 @@
 
     <rundeckPluginVersion>1.1</rundeckPluginVersion>
 
+    <!-- packaging properties -->
+    <packagingProjectName>rundeck</packagingProjectName>
+    <rpmProjectGroup>Applications/System</rpmProjectGroup>
+    <packagingProjectArch>noarch</packagingProjectArch>
+    <packagingAppPrefix>/var/lib/${packagingProjectName}</packagingAppPrefix>
+    <packagingAppConfDir>/etc/${packagingProjectName}</packagingAppConfDir>
+    <packagingAppLogDir>/var/log/${packagingProjectName}</packagingAppLogDir>
+    <packagingAppTempDir>/tmp/${packagingProjectName}</packagingAppTempDir>
+    <packagingAppProjectPrefix>/var/${packagingProjectName}/projects</packagingAppProjectPrefix>
+    <packagingAppUser>${packagingProjectName}</packagingAppUser>
+    <packagingAppGroup>${packagingAppUser}</packagingAppGroup>
+    <packagingDirMode>755</packagingDirMode>
+    <packagingFileMode>644</packagingFileMode>
+
     <!-- 3rd party versions -->
     <groovyVersion>2.3.7</groovyVersion>
     <jacksonVersion>2.5.3</jacksonVersion>
@@ -623,6 +637,7 @@
           <groupId>org.vafer</groupId>
           <artifactId>jdeb</artifactId>
           <version>1.5</version>
+          <extensions>true</extensions>
         </plugin>
       </plugins>
     </pluginManagement>

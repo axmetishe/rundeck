@@ -28,10 +28,10 @@ case "$1" in
    
     # Sane defaults:
    
-    [ -z "$SERVER_HOME" ] && SERVER_HOME=/var/lib/rundeck
-    [ -z "$SERVER_USER" ] && SERVER_USER=rundeck
+    [ -z "$SERVER_HOME" ] && SERVER_HOME=[[packagingAppPrefix]]
+    [ -z "$SERVER_USER" ] && SERVER_USER=[[packagingAppUser]]
     [ -z "$SERVER_NAME" ] && SERVER_NAME="Rundeck user account"
-    [ -z "$SERVER_GROUP" ] && SERVER_GROUP=rundeck
+    [ -z "$SERVER_GROUP" ] && SERVER_GROUP=[[packagingAppGroup]]
 
     # create user to avoid running server as root
     # 1. create group if not existing
@@ -59,27 +59,6 @@ case "$1" in
             -d $SERVER_HOME   \
             -g $SERVER_GROUP  \
                $SERVER_USER
-
-    # 5. adjust file and directory permissions
-    setperm rundeck rundeck 0750 /var/lib/rundeck/work
-    setperm rundeck rundeck 0750 /var/lib/rundeck/data
-    setperm rundeck adm 2751 /var/lib/rundeck/logs
-    setperm rundeck rundeck 0750 /var/lib/rundeck/var
-    setperm rundeck rundeck 0750 /var/lib/rundeck/var/tmp
-    setperm rundeck rundeck 0750 /var/lib/rundeck/var/tmp/pluginJars
-    setperm rundeck rundeck 0750 /var/rundeck
-    setperm rundeck rundeck 0750 /var/rundeck/projects
-    setperm rundeck adm 2751 /var/log/rundeck
-    setperm rundeck rundeck 0750 /var/lib/rundeck/bootstrap
-    setperm rundeck rundeck 0750 /var/lib/rundeck/cli
-    setperm rundeck rundeck 0750 /var/lib/rundeck/exp
-    setperm rundeck rundeck 0750 /var/lib/rundeck/libext
-    setperm rundeck rundeck 0750 /tmp/rundeck
-    find /etc/rundeck/ -maxdepth 2 -type f -print0 | xargs -0 chown rundeck:rundeck
-    find /etc/rundeck/ -maxdepth 2 -type f -print0 | xargs -0 chmod 0640
-
-    # 6. set correct owner/permissions for service.log if it already exists
-    [ -f /var/log/rundeck/service.log ] && setperm rundeck adm 0664 /var/log/rundeck/service.log
     ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)

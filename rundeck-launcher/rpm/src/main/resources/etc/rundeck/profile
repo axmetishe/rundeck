@@ -1,10 +1,10 @@
-RDECK_BASE=${rpmAppPrefix}
+RDECK_BASE=${packagingAppPrefix}
 export RDECK_BASE
 
-RUNDECK_TEMP_DIR=${rpmAppTempDir}
-RUNDECK_CONF_DIR=${rpmAppConfDir}
-RUNDECK_LOG_DIR=${rpmAppLogDir}
-RUNDECK_PROJECT_DIR=${rpmAppProjectPrefix}
+RUNDECK_TEMP_DIR=${packagingAppTempDir}
+RUNDECK_CONF_DIR=${packagingAppConfDir}
+RUNDECK_LOG_DIR=${packagingAppLogDir}
+RUNDECK_PROJECT_DIR=${packagingAppProjectPrefix}
 
 RDECK_HTTP_PORT=4440
 RDECK_HTTPS_PORT=4443

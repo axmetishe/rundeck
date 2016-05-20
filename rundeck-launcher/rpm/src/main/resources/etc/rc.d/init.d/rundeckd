@@ -11,11 +11,11 @@
 . /etc/rundeck/profile
 
 prog="rundeckd"
-rundeckd="${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer ${rpmAppPrefix} ${RDECK_HTTP_PORT}"
+rundeckd="${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer ${packagingAppPrefix} ${RDECK_HTTP_PORT}"
 RETVAL=0
 PID_FILE=/var/run/${prog}.pid
-USER=${rpmAppUser}
-servicelog=${rpmAppLogDir}/service.log
+USER=${packagingAppUser}
+servicelog=${packagingAppLogDir}/service.log
 
 start() {
 	echo -n $"Starting $prog: "

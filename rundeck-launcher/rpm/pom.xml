@@ -19,21 +19,6 @@
   </description>
   <url>http://rundeck.org</url>
 
-  <properties>
-    <rpmProjectName>rundeck</rpmProjectName>
-    <rpmProjectGroup>Applications/System</rpmProjectGroup>
-    <rpmProjectArch>noarch</rpmProjectArch>
-    <rpmAppPrefix>/var/lib/${rpmProjectName}</rpmAppPrefix>
-    <rpmAppConfDir>/etc/${rpmProjectName}</rpmAppConfDir>
-    <rpmAppLogDir>/var/log/${rpmProjectName}</rpmAppLogDir>
-    <rpmAppTempDir>/tmp/${rpmProjectName}</rpmAppTempDir>
-    <rpmAppProjectPrefix>/var/${rpmProjectName}/projects</rpmAppProjectPrefix>
-    <rpmAppUser>${rpmProjectName}</rpmAppUser>
-    <rpmAppGroup>${rpmAppUser}</rpmAppGroup>
-    <rpmDirMode>755</rpmDirMode>
-    <rpmFileMode>644</rpmFileMode>
-  </properties>
-
   <build>
     <resources>
       <resource>
@@ -73,16 +58,16 @@
           </execution>
         </executions>
         <configuration>
-          <name>${rpmProjectName}</name>
+          <name>${packagingProjectName}</name>
           <group>${rpmProjectGroup}</group>
           <license>APL</license>
           <summary>${project.parent.name}</summary>
-          <classifier>${rpmProjectArch}</classifier>
-          <prefix>${rpmAppPrefix}</prefix>
-          <defaultDirmode>${rpmDirMode}</defaultDirmode>
-          <defaultFilemode>${rpmFileMode}</defaultFilemode>
-          <defaultUsername>${rpmAppUser}</defaultUsername>
-          <defaultGroupname>${rpmAppGroup}</defaultGroupname>
+          <classifier>${packagingProjectArch}</classifier>
+          <prefix>${packagingAppPrefix}</prefix>
+          <defaultDirmode>${packagingDirMode}</defaultDirmode>
+          <defaultFilemode>${packagingFileMode}</defaultFilemode>
+          <defaultUsername>${packagingAppUser}</defaultUsername>
+          <defaultGroupname>${packagingAppGroup}</defaultGroupname>
           <requires>
             <require>openssh</require>
           </requires>
@@ -90,7 +75,7 @@
           </defineStatements>
           <mappings>
             <mapping>
-              <directory>${rpmAppConfDir}</directory>
+              <directory>${packagingAppConfDir}</directory>
               <configuration>noreplace</configuration>
               <sources>
                 <source>
@@ -107,26 +92,26 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/.ssh</directory>
+              <directory>${packagingAppPrefix}/.ssh</directory>
               <filemode>700</filemode>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}</directory>
+              <directory>${packagingAppPrefix}</directory>
               <sources>
                 <softlinkSource>
                   <destination>logs</destination>
-                  <location>${rpmAppLogDir}</location>
+                  <location>${packagingAppLogDir}</location>
                 </softlinkSource>
               </sources>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/data</directory>
+              <directory>${packagingAppPrefix}/data</directory>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/work</directory>
+              <directory>${packagingAppPrefix}/work</directory>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/exp/webapp</directory>
+              <directory>${packagingAppPrefix}/exp/webapp</directory>
               <sources>
                 <source>
                   <location>${project.build.outputDirectory}/webapp</location>
@@ -134,16 +119,16 @@
               </sources>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/var/tmp/pluginJars</directory>
+              <directory>${packagingAppPrefix}/var/tmp/pluginJars</directory>
             </mapping>
             <mapping>
-              <directory>${rpmAppProjectPrefix}</directory>
+              <directory>${packagingAppProjectPrefix}</directory>
             </mapping>
             <mapping>
-              <directory>${rpmAppTempDir}</directory>
+              <directory>${packagingAppTempDir}</directory>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/cli</directory>
+              <directory>${packagingAppPrefix}/cli</directory>
               <dependency>
                 <includes>
                   <include>org.rundeck:core</include>
@@ -172,7 +157,7 @@
               </dependency>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/bootstrap</directory>
+              <directory>${packagingAppPrefix}/bootstrap</directory>
               <dependency>
                 <includes>
                   <include>org.rundeck.launcher:jetty-server</include>
@@ -186,7 +171,7 @@
               </dependency>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/libext</directory>
+              <directory>${packagingAppPrefix}/libext</directory>
               <dependency>
                 <includes>
                   <include>org.rundeck.plugins:*</include>
@@ -194,7 +179,7 @@
               </dependency>
             </mapping>
             <mapping>
-              <directory>${rpmAppPrefix}/libext/cache</directory>
+              <directory>${packagingAppPrefix}/libext/cache</directory>
             </mapping>
           </mappings>
           <preinstallScriptlet>

@@ -1,2 +1,2 @@
-getent group ${rpmAppGroup} >/dev/null || groupadd ${rpmAppGroup}
-getent passwd ${rpmAppUser} >/dev/null || useradd -d ${rpmAppPrefix} -m -g ${rpmAppGroup} ${rpmAppUser}
+getent group ${packagingAppGroup} >/dev/null || groupadd ${packagingAppGroup}
+getent passwd ${packagingAppUser} >/dev/null || useradd -d ${packagingAppPrefix} -m -g ${packagingAppGroup} ${packagingAppUser}

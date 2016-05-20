@@ -1,4 +1,4 @@
-if [ ! -e ~${rpmAppUser}/.ssh/id_rsa ]; then
-	su -c "ssh-keygen -q -t rsa -C '' -N '' -f ~${rpmAppUser}/.ssh/id_rsa" ${rpmAppUser}
+if [ ! -e ~${packagingAppUser}/.ssh/id_rsa ]; then
+	su -c "ssh-keygen -q -t rsa -C '' -N '' -f ~${packagingAppUser}/.ssh/id_rsa" ${packagingAppUser}
 fi
 /sbin/chkconfig --add rundeckd
