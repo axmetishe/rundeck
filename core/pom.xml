@@ -32,6 +32,47 @@
     </resources>
 
     <plugins>
+      <!-- TODO: remove Rundeck-Tools-Dependencies property, use Class-Path property -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>get-classpath</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>build-classpath</goal>
+            </goals>
+            <configuration>
+              <includeScope>compile</includeScope>
+              <outputProperty>libraryClasspath</outputProperty>
+              <prefix>@</prefix>
+              <fileSeparator>@</fileSeparator>
+              <pathSeparator>@</pathSeparator>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>clean-classpath-property</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>regex-property</goal>
+            </goals>
+            <configuration>
+              <name>libraryClasspath</name>
+              <value>${libraryClasspath}</value>
+              <regex>@{2,}</regex>
+              <replacement xml:space="preserve"> </replacement>
+              <failIfNoMatch>false</failIfNoMatch>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -48,54 +89,6 @@
 
     <pluginManagement>
       <plugins>
-        <!-- TODO: check usage -->
-        <!--<plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <configuration>
-            <archive>
-              <manifestEntries>
-                <Rundeck-Tools-Dependencies>
-                  rundeck-storage-api-2.6.7.jar
-                  rundeck-storage-conf-2.6.7.jar
-                  jaxen-1.1.jar
-                  ant-1.8.3.jar
-                  log4j-1.2.17.jar
-                  commons-codec-1.5.jar
-                  commons-beanutils-1.8.3.jar
-                  commons-collections-3.2.2.jar
-                  commons-logging-1.1.1.jar
-                  commons-lang-2.6.jar
-                  dom4j-1.6.1.jar
-                  commons-cli-1.0.jar
-                  ant-jsch-1.8.3.jar
-                  jsch-0.1.53.jar
-                  jsch.agentproxy.jsch-0.0.9.jar
-                  jsch.agentproxy.sshagent-0.0.9.jar
-                  jsch.agentproxy.usocket-jna-0.0.9.jar
-                  jsch.agentproxy.usocket-nc-0.0.9.jar
-                  jsch.agentproxy.connector-factory-0.0.9.jar
-                  jsch.agentproxy.core-0.0.9.jar
-                  jackson-databind-2.5.3.jar
-                  jackson-core-2.5.3.jar
-                  jackson-annotations-2.5.3.jar
-                  snakeyaml-1.9.jar
-                  xercesImpl-2.11.0.jar
-                  xml-apis-1.4.01.jar
-                  commons-httpclient-3.0.1.jar
-                  rundeck-storage-data-2.6.7.jar
-                  jdom-1.0.jar
-                  xom-1.0.jar
-                  ant-launcher-1.8.3.jar
-                  jna-4.1.0.jar
-                  jna-platform-4.1.0.jar
-                  jsch.agentproxy.pageant-0.0.9.jar
-                  icu4j-2.6.1.jar
-                </Rundeck-Tools-Dependencies>
-              </manifestEntries>
-            </archive>
-          </configuration>
-        </plugin>-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
