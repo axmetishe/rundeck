@@ -101,6 +101,7 @@ build/
 gradle-cache/
 
 ### App Specific
+!usr/bin/
 rundeckapp/plugins/
 docs/*/manpages/man*/*.gz
 docs/*/manpages/man*/*.1
@@ -108,7 +109,6 @@ docs/*/manpages/man*/*.5
 docs/dist
 docs/*/dist
 /lib/
-/bin/
 cobertura.ser
 /rundeckapp/stacktrace.log
 /rundeckapp/grails-app/i18n/messages.properties.orig

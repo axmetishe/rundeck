@@ -75,6 +75,13 @@
 
     <rundeckPluginVersion>1.1</rundeckPluginVersion>
 
+    <!-- configuration properties -->
+    <frameworkServerHost>localhost</frameworkServerHost>
+    <frameworkServerPort>4440</frameworkServerPort>
+    <frameworkServerName>${frameworkServerHost}</frameworkServerName>
+    <frameworkServerUser>admin</frameworkServerUser>
+    <frameworkServerUserPwd>admin</frameworkServerUserPwd>
+
     <!-- packaging properties -->
     <packagingProjectName>rundeck</packagingProjectName>
     <rpmProjectGroup>Applications/System</rpmProjectGroup>
