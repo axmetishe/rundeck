@@ -19,5 +19,6 @@
     <module>launcher</module>
     <module>rpm</module>
     <module>deb</module>
+    <module>conf</module>
   </modules>
 </project>
