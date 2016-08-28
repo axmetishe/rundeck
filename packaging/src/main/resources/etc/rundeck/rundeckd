@@ -1,0 +1,130 @@
+#!/bin/bash
+#
+# $NAME               Startup script for the rundeck
+#
+# chkconfig:          2345 90 10
+# description:        rundeckd services.
+# pidfile:            $PIDFILE
+
+### BEGIN INIT INFO
+# Provides:           $NAME
+# Required-Start:     $local_fs $network
+# Required-Stop:      $local_fs $network
+# Default-Start:      2 3 4 5
+# Default-Stop:       0 1 6
+# Short-Description:  rundeck job automation console
+# Description:        rundeckd services.
+### END INIT INFO
+
+NAME="rundeckd"
+PIDFILE=/var/run/$NAME.pid
+PID=$(cat $PIDFILE 2>/dev/null)
+
+if [[ -n $(which java) ]]; then
+  export JAVA_HOME=$(readlink -f $(which java) | sed "s:/bin/java::")
+  export PATH=$PATH:$JAVA_HOME/bin
+  JAVA_CMD=$JAVA_HOME/bin/java
+else
+  echo "Make sure Java is installed and $JAVA_HOME is set"
+  exit 1
+fi
+OS_TYPE=`cat /etc/*release*|grep "^ID="|sed 's/\"//g'|awk -F= '{print $NF}'`
+if [[ $OS_TYPE == 'debian' ]] || [[ $OS_TYPE == 'ubuntu' ]]; then
+  . /lib/lsb/init-functions
+  . /etc/default/$NAME
+else
+  . /etc/rc.d/init.d/functions
+  . /etc/sysconfig/$NAME
+fi
+
+# Prepare environment variables
+RDECK_BASE_CONF=" -Drdeck.base=$RDECK_BASE \
+                  -Drdeck.config=$RDECK_CONF \
+                  -Drundeck.server.configDir=$RDECK_CONF"
+RDECK_SERV_CONF=" -Dserver.datastore.path=$RDECK_BASE/data \
+                  -Drundeck.server.serverDir=$RDECK_BASE \
+                  -Drundeck.config.location=$RDECK_CONF/rundeck-config.properties"
+RDECK_MISC_CONF=" -Drdeck.projects=$RDECK_PROJDIR \
+                  -Drdeck.runlogs=$RDECK_LOG \
+                  -Djava.io.tmpdir=$RDECK_TMP"
+
+RDECK_JVM=" $RDECK_BASE_CONF \
+            $RDECK_SERV_CONF \
+            $RDECK_MISC_CONF \
+            $RDECK_SSL_CONF \
+            $RDECK_SSL_PORT \
+            $RDECK_SSL_TS \
+            $RDECK_SSL_TS_TYPE \
+            $RDECK_SSL_HANDLER"
+
+DAEMON=$JAVA_CMD
+DAEMON_ARGS="$RDECK_JVM -cp $BOOTSTRAP_CP com.dtolabs.rundeck.RunServer $RDECK_BASE $RDECK_HTTP_PORT"
+RUNDECKD="$DAEMON $DAEMON_ARGS"
+
+checkPid() {
+  if [[ -d "/proc/${PID}" ]] && [[ -n $(cat /proc/${PID}/status 2>/dev/null) ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+start() {
+  checkPid
+  if [[ $? -ne 0 ]]; then
+    echo "Starting $NAME"
+    nohup su -s /bin/bash $RDECK_USER -c "$RUNDECKD" &>>$RDECK_LOG/service.log &
+
+    if [[ $? -eq 0 ]]; then
+      echo $! > $PIDFILE
+    fi
+
+    return $?
+  else
+    echo "Already running"
+    return 0
+  fi
+}
+
+stop() {
+  echo "Stopping $NAME"
+  kill $PID
+
+  if [[ $? -eq 0 ]]; then
+    rm -f $PIDFILE
+  fi
+
+  return $?
+}
+
+status() {
+  checkPid
+
+  if [[ $? -eq 0 ]]; then
+    echo "Service running"
+  else
+    echo "Not running"
+  fi
+  return $?
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  force-reload|restart)
+    stop
+    start
+    ;;
+  status)
+    status
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart|force-reload|status}"
+    exit 1
+esac
+
+exit $?

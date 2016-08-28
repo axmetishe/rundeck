@@ -3,5 +3,5 @@ Version: [[version]]
 Section: utils
 Priority: optional
 Architecture: all
-Depends: openssh-client, java7-runtime | java7-runtime-headless | java8-runtime | java8-runtime-headless , adduser (>= 3.11)
+Depends: openssh-client, java7-runtime|java7-runtime-headless|java8-runtime|java8-runtime-headless
 Maintainer: Noah Campbell <noahcampbell@gmail.com>

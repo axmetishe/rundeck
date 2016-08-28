@@ -1,0 +1,14 @@
+#!/bin/sh
+
+case "$1" in
+  configure|1)
+    if ! getent group ${packagingAppGroup} > /dev/null 2>&1 ; then
+        groupadd -r ${packagingAppGroup}
+    fi
+    if ! getent passwd ${packagingAppUser} > /dev/null 2>&1 ; then
+        useradd -r -N -M -d ${packagingAppPrefix} -g ${packagingAppGroup} ${packagingAppUser} > /dev/null 2>&1
+    fi
+    ;;
+  *)
+    ;;
+esac

@@ -1,2 +1,0 @@
-getent group ${packagingAppGroup} >/dev/null || groupadd ${packagingAppGroup}
-getent passwd ${packagingAppUser} >/dev/null || useradd -d ${packagingAppPrefix} -m -g ${packagingAppGroup} ${packagingAppUser}

@@ -1,0 +1,45 @@
+[Unit]
+Description=Rundeck provides a single console for dispatching commands across many resources.
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=${packagingAppUser}
+PIDFile=/var/run/rundeckd.pid
+
+EnvironmentFile=-/etc/default/rundeckd
+
+Environment='RDECK_USER=${packagingAppUser}'
+Environment='RDECK_BASE=${packagingAppPrefix}'
+Environment='RDECK_CONF=${packagingAppConfDir}'
+Environment='RDECK_PROJDIR=${packagingAppProjectPrefix}'
+Environment='RDECK_LOG=${packagingAppLogDir}'
+Environment='RDECK_TMP=${packagingAppTempDir}'
+Environment='RDECK_HTTP_PORT=${packagingAppJavaHttpPort}'
+Environment='RDECK_JVM_MEMORY=-Xmx${packagingAppJavaMX} -Xms${packagingAppJavaMS} -XX:MaxPermSize=${packagingAppJavaMPS'
+Environment='CLI_CP=${packagingAppPrefix}/cli/*'
+Environment='BOOTSTRAP_CP=${packagingAppPrefix}/bootstrap/*'
+
+ExecStart=/usr/bin/java \
+  $RDECK_SSL_CONF \
+  $RDECK_SSL_PORT \
+  $RDECK_SSL_TS \
+  $RDECK_SSL_TS_TYPE \
+  $RDECK_SSL_HANDLER \
+  -Drdeck.base=${RDECK_BASE} \
+  -Drdeck.config=${RDECK_CONF} \
+  -Drundeck.server.configDir=${RDECK_CONF} \
+  -Dserver.datastore.path=${RDECK_BASE}/data \
+  -Drundeck.server.serverDir=${RDECK_BASE} \
+  -Drundeck.config.location=${RDECK_CONF}/rundeck-config.properties \
+  -Drdeck.projects=${RDECK_PROJDIR} \
+  -Drdeck.runlogs=${RDECK_LOG} \
+  -Djava.io.tmpdir=${RDECK_TMP} \
+  -cp "${BOOTSTRAP_CP}" \
+  $RDECK_JVM_MEMORY -server \
+  com.dtolabs.rundeck.RunServer ${RDECK_BASE} ${RDECK_HTTP_PORT}
+
+SuccessExitStatus=130 143
+
+[Install]
+WantedBy=multi-user.target

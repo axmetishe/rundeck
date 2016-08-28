@@ -1,0 +1,18 @@
+# If you use systemd, change user in unit file /lib/systemd/system/rundeckd.service
+RDECK_USER=${packagingAppUser}
+RDECK_BASE=${packagingAppPrefix}
+RDECK_CONF=${packagingAppConfDir}
+RDECK_PROJDIR=${packagingAppProjectPrefix}
+RDECK_LOG=${packagingAppLogDir}
+RDECK_TMP=${packagingAppTempDir}
+RDECK_HTTP_PORT=${packagingAppJavaHttpPort}
+RDECK_JVM_MEMORY=-Xmx${packagingAppJavaMX} -Xms${packagingAppJavaMS} -XX:MaxPermSize=${packagingAppJavaMPS}
+
+CLI_CP=${packagingAppPrefix}/cli/*
+BOOTSTRAP_CP=${packagingAppPrefix}/bootstrap/*
+
+#RDECK_SSL_CONF=-Drundeck.ssl.config=${packagingAppConfDir}/ssl/ssl.properties
+#RDECK_SSL_PORT=-Dserver.https.port=${packagingAppJavaHttpsPort}
+#RDECK_SSL_TS=-Djavax.net.ssl.trustStore=${packagingAppConfDir}/ssl/truststore
+#RDECK_SSL_TS_TYPE=-Djavax.net.ssl.trustStoreType=jks
+#RDECK_SSL_HANDLER=-Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol

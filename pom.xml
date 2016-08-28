@@ -53,6 +53,7 @@
     <module>plugins</module>
     <module>rundeck-launcher</module>
     <module>rundeckapp</module>
+    <module>packaging</module>
   </modules>
 
   <properties>
@@ -68,6 +69,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <src.dir>src/main/java</src.dir>
+    <src.scripts.dir>src/main/scripts</src.scripts.dir>
     <res.dir>src/main/resources</res.dir>
     <assembly.dir>src/assembly</assembly.dir>
     <test.src.dir>src/test/java</test.src.dir>
@@ -93,6 +95,12 @@
     <packagingAppProjectPrefix>/var/${packagingProjectName}/projects</packagingAppProjectPrefix>
     <packagingAppUser>${packagingProjectName}</packagingAppUser>
     <packagingAppGroup>${packagingAppUser}</packagingAppGroup>
+    <packagingAppJavaMX>1g</packagingAppJavaMX>
+    <packagingAppJavaMS>256m</packagingAppJavaMS>
+    <packagingAppJavaMPS>256m</packagingAppJavaMPS>
+    <packagingAppJavaHttpPort>4440</packagingAppJavaHttpPort>
+    <packagingAppJavaHttpsPort>4443</packagingAppJavaHttpsPort>
+    <packagingControlDir>${project.build.directory}/control</packagingControlDir>
     <packagingDirMode>755</packagingDirMode>
     <packagingFileMode>644</packagingFileMode>
 
@@ -623,11 +631,6 @@
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
-          <artifactId>rpm-maven-plugin</artifactId>
-          <version>2.1.5</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
           <version>2.2</version>
         </plugin>
@@ -644,7 +647,230 @@
           <groupId>org.vafer</groupId>
           <artifactId>jdeb</artifactId>
           <version>1.5</version>
-          <extensions>true</extensions>
+          <configuration>
+            <snapshotExpand>true</snapshotExpand>
+            <verbose>true</verbose>
+            <installDir>${packagingAppPrefix}</installDir>
+            <controlDir>${packagingControlDir}</controlDir>
+            <dataSet>
+              <data>
+                <type>directory</type>
+                <src>${project.build.outputDirectory}</src>
+                <includes>etc/**/*</includes>
+                <conffile>true</conffile>
+              </data>
+              <data>
+                <type>template</type>
+                <paths>
+                  <path>${packagingAppPrefix}/.ssh</path>
+                </paths>
+                <mapper>
+                  <type>perm</type>
+                  <user>${packagingAppUser}</user>
+                  <group>${packagingAppGroup}</group>
+                  <dirmode>700</dirmode>
+                </mapper>
+              </data>
+              <data>
+                <type>directory</type>
+                <src>${project.build.outputDirectory}/cli</src>
+                <includes>*.jar</includes>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>${packagingAppPrefix}/cli</prefix>
+                  <user>${packagingAppUser}</user>
+                  <group>${packagingAppGroup}</group>
+                  <dirmode>750</dirmode>
+                  <filemode>640</filemode>
+                </mapper>
+              </data>
+              <data>
+                <type>directory</type>
+                <src>${project.build.outputDirectory}/webapp</src>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>${packagingAppPrefix}/exp/webapp</prefix>
+                  <user>${packagingAppUser}</user>
+                  <group>${packagingAppGroup}</group>
+                  <dirmode>750</dirmode>
+                  <filemode>640</filemode>
+                </mapper>
+              </data>
+              <data>
+                <type>directory</type>
+                <src>${project.build.outputDirectory}/bootstrap</src>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>${packagingAppPrefix}/bootstrap</prefix>
+                  <user>${packagingAppUser}</user>
+                  <group>${packagingAppGroup}</group>
+                  <dirmode>750</dirmode>
+                  <filemode>640</filemode>
+                </mapper>
+              </data>
+              <data>
+                <type>directory</type>
+                <src>${project.build.outputDirectory}/libext</src>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>${packagingAppPrefix}/libext</prefix>
+                  <user>${packagingAppUser}</user>
+                  <group>${packagingAppGroup}</group>
+                  <dirmode>750</dirmode>
+                  <filemode>640</filemode>
+                </mapper>
+              </data>
+              <data>
+                <type>directory</type>
+                <src>${project.build.outputDirectory}/usr/bin</src>
+                <excludes>**/*.bat</excludes>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/usr/bin</prefix>
+                  <user>${packagingAppUser}</user>
+                  <group>${packagingAppGroup}</group>
+                  <filemode>750</filemode>
+                </mapper>
+              </data>
+              <data>
+                <type>template</type>
+                <paths>
+                  <path>${packagingAppPrefix}/data</path>
+                  <path>${packagingAppPrefix}/work</path>
+                  <path>${packagingAppLogDir}</path>
+                </paths>
+                <mapper>
+                  <type>perm</type>
+                  <user>${packagingAppUser}</user>
+                  <group>${packagingAppGroup}</group>
+                  <dirmode>750</dirmode>
+                  <filemode>640</filemode>
+                </mapper>
+              </data>
+              <data>
+                <type>link</type>
+                <linkName>${packagingAppPrefix}/logs</linkName>
+                <linkTarget>${packagingAppLogDir}</linkTarget>
+                <symlink>true</symlink>
+              </data>
+            </dataSet>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rpm-maven-plugin</artifactId>
+          <version>2.1.5</version>
+          <configuration>
+            <name>${packagingProjectName}</name>
+            <group>${rpmProjectGroup}</group>
+            <license>APL</license>
+            <summary>${project.parent.name}</summary>
+            <classifier>${packagingProjectArch}</classifier>
+            <prefix>${packagingAppPrefix}</prefix>
+            <defaultDirmode>${packagingDirMode}</defaultDirmode>
+            <defaultFilemode>${packagingFileMode}</defaultFilemode>
+            <defaultUsername>${packagingAppUser}</defaultUsername>
+            <defaultGroupname>${packagingAppGroup}</defaultGroupname>
+            <requires>
+              <require>openssh</require>
+            </requires>
+            <defineStatements>
+            </defineStatements>
+            <mappings>
+              <mapping>
+                <directory>${packagingAppConfDir}</directory>
+                <configuration>noreplace</configuration>
+                <sources>
+                  <source>
+                    <location>${project.build.outputDirectory}${packagingAppConfDir}</location>
+                  </source>
+                </sources>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/.ssh</directory>
+                <filemode>700</filemode>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}</directory>
+                <sources>
+                  <softlinkSource>
+                    <destination>logs</destination>
+                    <location>${packagingAppLogDir}</location>
+                  </softlinkSource>
+                </sources>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/data</directory>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/work</directory>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/exp/webapp</directory>
+                <sources>
+                  <source>
+                    <location>${project.build.outputDirectory}/webapp</location>
+                  </source>
+                </sources>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/cli</directory>
+                <sources>
+                  <source>
+                    <location>${project.build.outputDirectory}/cli</location>
+                  </source>
+                </sources>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/bootstrap</directory>
+                <sources>
+                  <source>
+                    <location>${project.build.outputDirectory}/bootstrap</location>
+                  </source>
+                </sources>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/libext</directory>
+                <sources>
+                  <source>
+                    <location>${project.build.outputDirectory}/libext</location>
+                  </source>
+                </sources>
+              </mapping>
+              <mapping>
+                <directory>/etc/sysconfig</directory>
+                <filemode>640</filemode>
+                <username>root</username>
+                <groupname>root</groupname>
+                <sources>
+                  <source>
+                    <location>${project.build.outputDirectory}/etc/default</location>
+                  </source>
+                </sources>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/var/tmp/pluginJars</directory>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppProjectPrefix}</directory>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppTempDir}</directory>
+              </mapping>
+              <mapping>
+                <directory>${packagingAppPrefix}/libext/cache</directory>
+              </mapping>
+            </mappings>
+            <preinstallScriptlet>
+              <scriptFile>${packagingControlDir}/preinst</scriptFile>
+            </preinstallScriptlet>
+            <postinstallScriptlet>
+              <scriptFile>${packagingControlDir}/postinst</scriptFile>
+            </postinstallScriptlet>
+            <postremoveScriptlet>
+              <scriptFile>${packagingControlDir}/postrm</scriptFile>
+            </postremoveScriptlet>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -733,6 +959,11 @@
       <dependency>
         <groupId>org.rundeck.launcher</groupId>
         <artifactId>jetty-server</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.rundeck.launcher</groupId>
+        <artifactId>conf</artifactId>
         <version>${project.version}</version>
       </dependency>
 

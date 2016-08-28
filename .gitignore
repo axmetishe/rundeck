@@ -101,7 +101,7 @@ build/
 gradle-cache/
 
 ### App Specific
-!usr/bin/
+!**/usr/bin/
 rundeckapp/plugins/
 docs/*/manpages/man*/*.gz
 docs/*/manpages/man*/*.1
